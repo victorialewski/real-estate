@@ -1,0 +1,111 @@
+.Left {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.Left-Container {
+    width: 100%;
+    max-width: 1500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    box-sizing: border-box;
+    border-radius: 8px;
+}
+
+/* Make the category wrapper flexible */
+.category-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 1200px;
+    max-width: 100%;
+    border-radius: 5px;
+    padding: 1rem;
+    box-sizing: border-box;
+    transition: box-shadow 0.3s ease;
+    padding: 2%;
+    margin: 1%;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 10px;
+    
+}
+
+.category-wrapper:hover {
+    box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
+}
+
+.category-header {
+    padding: 0.5rem 1rem;
+    /* font-weight: bold; */
+    font-size: 1.1rem;
+}
+
+
+
+/* .pricing{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+.input-group {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+
+  }
+  .profitForm{
+    width:30%;
+  }
+  .input-rehab-group{
+    width: 30%;
+    display: flex;
+    align-items: flex-start;
+  }
+  
+.category-breakdown{
+    display: grid;
+    grid-template-rows:  1fr 1fr
+    
+}
+.rehab-input{
+    width:50px;
+}
+
+.category-container{
+    width:55%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.category-name{
+    display: flex;
+    align-items: flex-end;
+}
+
+.category-wrapper{
+    display: flex;
+    width: 100%;
+    padding: 2%;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 10px;
+
+
+}
+
+ .category-title{
+    display: flex;
+}
+.category-header{
+    padding: 2%;
+}
+
+.category-wrapper:hover {
+box-shadow: 0 0 11px rgba(33,33,33,.2); 
+} */
