@@ -15,8 +15,10 @@ export default function SowRight({
     setRehab,
     avgPrice,
     setAvgPrice,
+    salePriceFromARV,
+    setSalePriceFromARV,
+    houseSalePrice,
     avgSalePrice,
-    setAvgSalePrice
 }) {
 
     const [inputPercentage, setInputPercentage] = useState(""); 
@@ -24,7 +26,7 @@ export default function SowRight({
     const [percentage, setPercentage] = useState(0.7); 
     const [holdingCostInput, setHoldingCostInput] = useState(""); // ✅ NEW
 
-    const realtorTotal = arvInput || avgSalePrice ? formatCurrency(Number(arvInput || avgSalePrice) * 0.02) : formatCurrency(0);
+    const realtorTotal = arvInput || houseSalePrice ? formatCurrency(Number(arvInput || houseSalePrice) * 0.02) : formatCurrency(0);
 
     const investment = formatCurrency(
         Number(rehab) +
@@ -33,7 +35,6 @@ export default function SowRight({
         Number(holdingCostInput) + // ✅ INCLUDE HOLDING COST
         Number(total)
     );
-
     const pocketInvestment = formatCurrency(
         Number(rehab) +
         Number(downPaymentInput) +
@@ -41,8 +42,8 @@ export default function SowRight({
         Number(total)
     );
 
-    const saleInvestment = arvInput || avgSalePrice
-        ? formatCurrency(Number(arvInput || avgSalePrice) + Number(realtorTotal.replace(/[^0-9.-]+/g, '')))
+    const saleInvestment = arvInput || houseSalePrice
+        ? formatCurrency(Number(arvInput || houseSalePrice) + Number(realtorTotal.replace(/[^0-9.-]+/g, '')))
         : formatCurrency(0);
 
     const grandTotal = formatCurrency(
@@ -69,12 +70,12 @@ export default function SowRight({
         return remaining;
     };
 
-    const maxARV = calculateMaxARV(arvInput || avgSalePrice, inputPercentage);
+    const maxARV = calculateMaxARV(arvInput || houseSalePrice, inputPercentage);
     const remainingPercentage = calculateRemainingPercentage(inputPercentage);
 
-    const rawARV = Number(arvInput || avgSalePrice);
+    const rawARV = Number(arvInput || houseSalePrice);
     const rawMaxARV = Number(String(maxARV).replace(/[^0-9.-]+/g, ""));
-    const adjustmentPrice = arvInput || avgSalePrice
+    const adjustmentPrice = arvInput || houseSalePrice
         ? formatCurrency(rawARV - rawMaxARV)
         : formatCurrency(0);
 
@@ -227,7 +228,7 @@ export default function SowRight({
 
                             <div className="tooltip-container">
                                 <div className="amount-title">ARV:</div>
-                                <div className="amount-container">{formatCurrency(arvInput || avgSalePrice)}</div>
+                                <div className="amount-container">{formatCurrency(arvInput || houseSalePrice)}</div>
                             </div>
 
                             <div className="tooltip-container">
@@ -255,7 +256,7 @@ export default function SowRight({
                         <div className="calculation-card">
                             <div className="tooltip-container">
                                 <div className="amount-title">Calculated ARV:</div>
-                                <div className="amount-container">{formatCurrency(arvInput || avgSalePrice)}</div>
+                                <div className="amount-container">{formatCurrency(arvInput || houseSalePrice)}</div>
                             </div>
 
                             <div className="tooltip-container">
@@ -278,7 +279,6 @@ export default function SowRight({
                                 <span className="tooltip-box">Pocket Value - grandTotal</span>
 
                             </div>
-
 
                         </div>
                     </div>

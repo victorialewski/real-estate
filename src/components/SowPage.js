@@ -6,6 +6,7 @@ import Arv from "./ARV/Arv";
 import "./Calculations/SowItems";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./Form.css"
+import "./SowPage.css"
 
 import axios from './Services/axios';
 // import { useNavigate, useLocation, Link } from 'react-router-dom';
@@ -31,12 +32,15 @@ export default function SowPage() {
 
     const [rehab, setRehab] = useState("");
     const [bathroomCount, setBathroomCount] = useState(0);
+    const [SqrFt, setSqrFt] = useState("");
     const [arvInput, setArvInput] = useState("");
     const [purchasePriceInput, setPurchasePriceInput] = useState("");
     const [downPaymentInput, setDownPaymentInput] = useState("");
     const [total, setTotal] = useState(0);
     const [avgPrice, setAvgPrice] = useState(null);
     const [avgSalePrice, setAvgSalePrice] = useState(null);
+    const [houseSalePrice, setHouseSalePrice] = useState(0);
+
 
 
     // 👇 Single state to control visible section
@@ -218,6 +222,8 @@ export default function SowPage() {
                         setAvgSalePrice={setAvgSalePrice}
                         setSelectedItems={setSelectedItems}
                         selectedItems={selectedItems}
+                        setSqrFt={setSqrFt}
+                        sqrFt = {SqrFt}
 
                     />
                 );
@@ -238,10 +244,14 @@ export default function SowPage() {
                         setAvgPrice={setAvgPrice}
                         avgSalePrice={avgSalePrice}
                         setAvgSalePrice={setAvgSalePrice}
+                        houseSalePrice={houseSalePrice} 
                     />
                 );
             case "Arv":
                 return <Arv
+                    setSqrFt={setSqrFt}
+                    sqrFt = {SqrFt}
+                    setSalePriceFromARV={setHouseSalePrice}
                     avgPrice={avgPrice}
                     setAvgPrice={setAvgPrice}
                     avgSalePrice={avgSalePrice}
@@ -252,29 +262,34 @@ export default function SowPage() {
     };
 
     return (
-        <div className="p-6 max-w-6xl mx-auto bg-white shadow-lg rounded-lg navBar-button">
-            <div className="mb-4 gap-4 navBar-button-container">
+        <div className="bg-white shadow-lg rounded-lg navBar-button">
+            <div className="navBar-button-container">
+                <div className="navBar-button-wrapper">
+                <div className="navBar-button-content">
+            
                 <button
                     onClick={() => setVisibleSection("SowLeft")}
-                    className={`btn card ${visibleSection === "SowLeft" ? "btn-primary" : "btn-outline-primary"}`}
+                    className={`btn-btn btn card ${visibleSection === "SowLeft" ? "btn-primary" : "btn-outline-primary"}`}
                 >
                     Rehab Calculator
                     {total || "0.00"}
                 </button>
                 <button
                     onClick={() => setVisibleSection("SowRight")}
-                    className={`btn card ${visibleSection === "SowRight" ? "btn-success" : "btn-outline-success"}`}
+                    className={` btn-btn btn card ${visibleSection === "SowRight" ? "btn-success" : "btn-outline-success"}`}
                 >
                     Investment Calculator
 
                 </button>
                 <button
                     onClick={() => setVisibleSection("Arv")}
-                    className={`btn card ${visibleSection === "Arv" ? "btn-info" : "btn-outline-info"}`}
+                    className={`btn-btn btn card ${visibleSection === "Arv" ? "btn-info" : "btn-outline-info"}`}
                 >
                     ARV Calculator
-                    {avgSalePrice}
+                    {houseSalePrice}
                 </button>
+            </div>
+            </div>
             </div>
 
             <div className="mt-4">

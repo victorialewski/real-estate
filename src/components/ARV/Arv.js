@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react"; 
 import "./Arv.css";
-import "../Form.css"
+import "../Form.css";
 
 export default function ArvCalculator({
     avgPrice,
     setAvgPrice,
     avgSalePrice,
-    setAvgSalePrice
+    setAvgSalePrice,
+    setSqrFt,
+    sqrFt,
+    setSalePriceFromARV,
 }) {
     const [inputs, setInputs] = useState([
         { address: '', sqFt: '', salePrice: '' }
@@ -21,6 +24,10 @@ export default function ArvCalculator({
 
     const handleAddInput = () => {
         setInputs([...inputs, { address: '', sqFt: '', salePrice: '' }]);
+    };
+
+    const handleSqurFtArv = (value) => {
+        setSqrFt(value || 0);
     };
 
     const calculateAverages = (e) => {
@@ -46,6 +53,14 @@ export default function ArvCalculator({
         setAvgSalePrice(avgSalePriceCalc.toFixed(2));
     };
 
+    const houseSalePrice = sqrFt * avgPrice;
+
+    useEffect(() => {
+        if (setSalePriceFromARV) {
+            setSalePriceFromARV(houseSalePrice.toFixed(2));
+        }
+    }, [houseSalePrice.toFixed(2), setSalePriceFromARV]);
+
     const formatWithCommas = (value) => {
         const num = parseFloat(value);
         if (isNaN(num)) return "";
@@ -54,10 +69,23 @@ export default function ArvCalculator({
             maximumFractionDigits: 2,
         });
     };
+
     return (
         <div className="ARV-Container">
             <form onSubmit={calculateAverages} className="ARVForm">
                 <h2 className="text-xl font-bold mb-4">Average Calculator</h2>
+                
+                <div className="input-group arv-input">
+                    <label>Square Footage</label>
+                    <input
+                        type="text"
+                        value={sqrFt}
+                        onChange={(e) => handleSqurFtArv(e.target.value)}
+                        className="w-full p-2 mb-2 border rounded arvForm"
+                        placeholder="sq ft"
+                    />
+                </div>
+
                 {inputs.map((input, index) => (
                     <div key={index} className="mb-4 ARV-calculator">
                         <div className="ARV-wrapper">
@@ -132,6 +160,8 @@ export default function ArvCalculator({
                     <p><strong>Average Price/Sq Ft:</strong> ${formatWithCommas(avgPrice)}</p>
                     <p><strong>Average Sq Ft:</strong> {formatWithCommas(avgSqFt)} ft²</p>
                     <p><strong>Average Sale Price:</strong> ${formatWithCommas(avgSalePrice)}</p>
+                    <p><strong>Home Sqr FT:</strong> {formatWithCommas(sqrFt)} ft²</p>
+                    <p><strong>Home Sell Price:</strong> ${formatWithCommas(houseSalePrice)}</p>
                 </div>
             )}
         </div>

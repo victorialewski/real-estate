@@ -2,7 +2,7 @@ import React from "react";
 // import { MdExpandMore, MdExpandLess } from "react-icons/md";
 // import "../SOW/SowItem.css";
 // import "./SowLeft.css";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import "./Navbar.css"
 
 export default function Navbar({
@@ -10,6 +10,8 @@ export default function Navbar({
 }) {
     return (
         <div className="navbar">
+                    <div className="navba-container">
+
             <div class = "card">
             <a href="/test">
            <div className = "rehab-Card">Scope of Work</div>
@@ -25,6 +27,8 @@ export default function Navbar({
            <div className = "rehab-Card">ARV Calcualtor</div>
            </a>
            </div>    
+           </div>    
+
 
         </div>
     );

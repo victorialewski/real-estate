@@ -5,7 +5,8 @@ import SowPage from './SOW/SowPage';
 function HomePage(){
 return(
 <div className="HomePage">
-<SowPage />
+    
+{/* <SowPage /> */}
 </div>
 
 

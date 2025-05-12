@@ -16,7 +16,9 @@ export default function SowLeft({
     handleBathroomCountChange,
     bathroomCount,
     setSelectedItems,
-    selectedItems
+    selectedItems,
+    setSqrFt,
+    sqrFt
 }) {
     return (
         <div className="Left">
@@ -30,6 +32,7 @@ export default function SowLeft({
                             <label><span>Square Footage</span></label>
                             <input
                                 type="number"
+                                value={sqrFt || "0"}
                                 placeholder="#"
                                 className="w-full p-2 border rounded profitForm"
                             />

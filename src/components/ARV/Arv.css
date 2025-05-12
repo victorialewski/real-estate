@@ -1,11 +1,54 @@
-.ARV-wrapper{
+/* .ARV-Container{
+    background-color: aqua;
+    width: 1000px;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+} */
+.ARV-wrapper {
+    width: 100%;
+    max-width: 1200px; /* You can adjust this to the width at which you want to trigger the wrapping */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-
+    flex-wrap: wrap; /* This allows wrapping of flex items */
+    padding: 1rem; /* Padding for spacing */
+    gap: 1rem; /* Space between the items */
+    margin: 0 auto; /* Center the wrapper on the page */
 }
-.arv-input{
-    padding: 1%;
 
-  }
+.arv-input {
+    flex: 1;
+    min-width: 200px; /* Ensure inputs don’t shrink too small */
+    padding: 1rem;
+    /* box-sizing: border-box; */
+    /* border: 1px solid #ccc; */
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .ARV-wrapper {
+        flex-direction: column; /* Stack items vertically */
+        padding: 1rem; /* Reduce padding */
+    }
+
+    .arv-input {
+        width: 100%; /* Ensure inputs take full width */
+        margin-bottom: 0.5rem; /* Adjust margin between inputs */
+    }
+}
+
+/* Adjustments for very small screens (e.g., phones in portrait mode) */
+@media (max-width: 480px) {
+    .ARV-wrapper {
+        padding: 0.5rem; /* Tighter padding on small screens */
+    }
+
+    .arv-input {
+        padding: 0.75rem; /* Smaller padding for mobile */
+    }
+}

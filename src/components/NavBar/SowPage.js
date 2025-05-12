@@ -29,8 +29,13 @@ export default function SowPage() {
     const [purchasePriceInput, setPurchasePriceInput] = useState("");
     const [downPaymentInput, setDownPaymentInput] = useState("");
     const [total, setTotal] = useState(0);
+    const [salePriceFromARV, setSalePriceFromARV] = useState(0);
 
-    // 👇 Single state to control visible section
+    const [avgSalePrice, setAvgSalePrice] = useState(0);
+    const [sqrFt, setSqrFt] = useState(0);
+    const [avgPrice, setAvgPrice] = useState(0);
+    const [houseSalePrice, setHouseSalePrice] = useState(0);
+
     const [visibleSection, setVisibleSection] = useState("SowRight");
 
     useEffect(() => {
@@ -48,9 +53,15 @@ export default function SowPage() {
         setTotal(newTotal);
     }, [items, bathroomCount]);
 
+    // Sync calculated ARV from Arv component
+    useEffect(() => {
+        if (houseSalePrice) {
+            setSalePriceFromARV(houseSalePrice);
+        }
+    }, [houseSalePrice]);
+
     const handleInputChange = (id, newValue) => {
         const cleanedValue = newValue === "" ? "" : newValue.replace(/^0+(?!$)/, "");
-
         setItems(prev =>
             prev.map(item =>
                 item.id === id
@@ -136,10 +147,23 @@ export default function SowPage() {
                         formatCurrency={formatCurrency}
                         rehab={rehab}
                         setRehab={setRehab}
+                        salePriceFromARV={salePriceFromARV}
+                        setSalePriceFromARV={setSalePriceFromARV}
                     />
                 );
             case "Arv":
-                return <Arv />;
+                return (
+                    <Arv
+                        avgPrice={avgPrice}
+                        setAvgPrice={setAvgPrice}
+                        avgSalePrice={avgSalePrice}
+                        setAvgSalePrice={setAvgSalePrice}
+                        sqrFt={sqrFt}
+                        setSqrFt={setSqrFt}
+                        houseSalePrice={houseSalePrice}
+                        setHouseSalePrice={setHouseSalePrice}
+                    />
+                );
             default:
                 return <div>Select a section to view</div>;
         }
