@@ -294,6 +294,7 @@ export default function SowRight({
 
                             <div className="tooltip-container">
                                 <div className="amount-title">Investment:</div>
+                                <span className="tooltip-box">Rehab, DownPayment, Holding Cost, Realtor Fee</span>
                                 <div className="amount-container">{pocketInvestment}</div>
                             </div>
                             
@@ -316,7 +317,7 @@ export default function SowRight({
                                 
                                 <div className = "amount-title">
                                 {showResale ? <MdExpandMore /> : <MdExpandLess/>}
-                                ReSale additional
+                                Re-Sale additional
                                 </div>
                             </button>
                             {showResale && <Resale  grandTotal={grandTotal} />}
@@ -335,6 +336,8 @@ export default function SowRight({
                             <div className="tooltip-container">
                                 <div className="amount-title">Remaining {remainingPercentage}%</div>
                                 <div className="amount-container">{adjustmentPrice}</div>
+                                <span className="tooltip-box">Everything from your investment, Additional Seller fee, + profit needs to come from this value</span>
+
                             </div>
                             <div className="tooltip-container">
                                 <div className="amount-title">Pocket Value</div>

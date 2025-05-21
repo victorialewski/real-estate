@@ -3,6 +3,8 @@ import { CiCirclePlus } from "react-icons/ci";
 import '../../Calculations/SowRight';
 import './ReSale.css';
 import { MdExpandMore, MdExpandLess } from "react-icons/md";
+import { FaTrash } from "react-icons/fa";
+
 
 const Resale = ({ grandTotal }) => {
     const [items, setItems] = useState([]);
@@ -18,6 +20,9 @@ const Resale = ({ grandTotal }) => {
         setValue('');
     };
 
+    const handleDeleteItem = (indexToRemove) => {
+        setItems(items.filter((_, index) => index !== indexToRemove));
+    };
     const formatCurrency = (value) => {
         return new Intl.NumberFormat("en-US", {
             style: "currency",
@@ -61,6 +66,13 @@ const Resale = ({ grandTotal }) => {
                 <div className="tooltip-container" key={index}>
                     <div className="amount-title">{item.name}</div>
                     <div className="amount-container">{formatCurrency(item.value)}</div>
+                    <button
+                        className="button-reset"
+                        onClick={() => handleDeleteItem(index)}
+                        aria-label="Delete item"
+                    >
+                        <FaTrash className="red-icon large-icon" />
+                    </button>
                 </div>
             ))}
 

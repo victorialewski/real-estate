@@ -4,7 +4,15 @@
 
   }
 
-/* 
-  .addCircle{
-    height: 200px;
-  } */
+  .red-icon {
+    color: red;
+    transition: color 0.3s ease;
+  }
+  
+  .red-icon:hover {
+    color: darkred; /* or any color you want on hover */
+  }
+  
+  .large-icon {
+    font-size: 20px;
+  }
