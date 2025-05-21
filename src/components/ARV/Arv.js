@@ -9,6 +9,7 @@ export default function ArvCalculator({
     setAvgSalePrice,
     setSqrFt,
     sqrFt,
+    handleSqurFtArv,
     setSalePriceFromARV,
 }) {
     const [inputs, setInputs] = useState([
@@ -24,10 +25,6 @@ export default function ArvCalculator({
 
     const handleAddInput = () => {
         setInputs([...inputs, { address: '', sqFt: '', salePrice: '' }]);
-    };
-
-    const handleSqurFtArv = (value) => {
-        setSqrFt(value || 0);
     };
 
     const calculateAverages = (e) => {

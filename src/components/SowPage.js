@@ -32,7 +32,7 @@ export default function SowPage() {
 
     const [rehab, setRehab] = useState("");
     const [bathroomCount, setBathroomCount] = useState(0);
-    const [SqrFt, setSqrFt] = useState("");
+    const [sqrFt, setSqrFt] = useState("");
     const [arvInput, setArvInput] = useState("");
     const [purchasePriceInput, setPurchasePriceInput] = useState("");
     const [downPaymentInput, setDownPaymentInput] = useState("");
@@ -40,6 +40,8 @@ export default function SowPage() {
     const [avgPrice, setAvgPrice] = useState(null);
     const [avgSalePrice, setAvgSalePrice] = useState(null);
     const [houseSalePrice, setHouseSalePrice] = useState(0);
+    const [flooringTotal, setFlooringTotal] = useState(0);
+
 
 
 
@@ -47,23 +49,32 @@ export default function SowPage() {
     const [visibleSection, setVisibleSection] = useState("SowRight");
 
     useEffect(() => {
+        let flooring = 0;
+      
         const newTotal = items.reduce((acc, item) => {
-            if (item.checked && item.property.toLowerCase() !== "bathroom") {
-                const value = item.useSetValue ? item.value : item.inputValue;
-                acc += parseFloat(value) || 0;
-            } else if (item.checked && item.property.toLowerCase() === "bathroom") {
-                const value = item.useSetValue ? item.value : item.inputValue;
-                const multiplier = parseFloat(bathroomCount) || 0;
-                acc += (parseFloat(value) || 0) * multiplier;
+          const value = item.useSetValue ? item.value : item.inputValue;
+          const prop = item.property.toLowerCase();
+      
+          if (item.checked) {
+            if (prop === "bathroom") {
+              acc += (parseFloat(value) || 0) * (parseFloat(bathroomCount) || 0);
+            } else if (prop === "flooring") {
+              flooring = (parseFloat(value) || 0) * (parseFloat(sqrFt) || 0);
+              acc += flooring;
+            } else {
+              acc += parseFloat(value) || 0;
             }
-            return acc;
+          }
+      
+          return acc;
         }, 0);
+      
+        setFlooringTotal(parseFloat(flooring));  // <- Set flooring cost separately
         setTotal(newTotal);
-    }, [items, bathroomCount]);
-    useEffect(() => {
-        const checkedItems = items.filter(item => item.checked);
-        setSelectedItems(checkedItems);
-    }, [items]);
+      }, [items, bathroomCount, sqrFt]);
+      
+      
+      
 
     const handleInputChange = (id, newValue) => {
         const cleanedValue = newValue === "" ? "" : newValue.replace(/^0+(?!$)/, "");
@@ -134,6 +145,10 @@ export default function SowPage() {
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
     const [selectedItems, setSelectedItems] = useState([]);
+    const handleSqurFtArv = (value) => {
+        console.log("handle sqrt ft event " + value);
+        setSqrFt(value || 0);
+    };
 
 
     // useEffect(() => {
@@ -213,6 +228,7 @@ export default function SowPage() {
                         handleCheckboxChange={handleCheckboxChange}
                         handleInputChange={handleInputChange}
                         handleRadioChange={handleRadioChange}
+                        handleSqurFtArv={handleSqurFtArv}
                         handleBathroomCountChange={handleBathroomCountChange}
                         bathroomCount={bathroomCount}
                         total={total}
@@ -223,7 +239,9 @@ export default function SowPage() {
                         setSelectedItems={setSelectedItems}
                         selectedItems={selectedItems}
                         setSqrFt={setSqrFt}
-                        sqrFt = {SqrFt}
+                        sqrFt = {sqrFt}
+                        flooringTotal={flooringTotal}
+
 
                     />
                 );
@@ -241,6 +259,7 @@ export default function SowPage() {
                         rehab={rehab}
                         setRehab={setRehab}
                         avgPrice={avgPrice}
+                        handleSqurFtArv={handleSqurFtArv}
                         setAvgPrice={setAvgPrice}
                         avgSalePrice={avgSalePrice}
                         setAvgSalePrice={setAvgSalePrice}
@@ -250,10 +269,11 @@ export default function SowPage() {
             case "Arv":
                 return <Arv
                     setSqrFt={setSqrFt}
-                    sqrFt = {SqrFt}
+                    sqrFt = {sqrFt}
                     setSalePriceFromARV={setHouseSalePrice}
                     avgPrice={avgPrice}
                     setAvgPrice={setAvgPrice}
+                    handleSqurFtArv={handleSqurFtArv}
                     avgSalePrice={avgSalePrice}
                     setAvgSalePrice={setAvgSalePrice} />;
             default:
@@ -296,7 +316,7 @@ export default function SowPage() {
                 {renderSection()}
             </div>
             <form onSubmit={handleSubmit}>
-                <button>Send to Subscriber</button>
+                <button>Send in email</button>
             </form>
         </div>
     );

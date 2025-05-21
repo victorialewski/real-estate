@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./SowRight.css";
 import "../Form.css";
+import Resale from "../ARV/ReSale/Resale";
+import { MdExpandMore, MdExpandLess } from "react-icons/md";
 
 export default function SowRight({
     total,
@@ -13,6 +15,7 @@ export default function SowRight({
     setDownPaymentInput,
     formatCurrency,
     setRehab,
+    handleSqurFtArv,
     avgPrice,
     setAvgPrice,
     salePriceFromARV,
@@ -24,26 +27,46 @@ export default function SowRight({
     const [inputPercentage, setInputPercentage] = useState(""); 
     const [remainingDecimal, setRemainingDecimal] = useState(""); 
     const [percentage, setPercentage] = useState(0.7); 
+    const [realtorCommissionInput, setRealtorCommission] = useState(""); 
+    const [realtorCommissionDecimal, setRealtorCommissionDecimal] = useState(0.02); // default to 2%
+    const [showResale, setShowResale] = useState(false);
+
     const [holdingCostInput, setHoldingCostInput] = useState(""); // ✅ NEW
 
-    const realtorTotal = arvInput || houseSalePrice ? formatCurrency(Number(arvInput || houseSalePrice) * 0.02) : formatCurrency(0);
+    const convertRealtorCommisionDecimal = (value) => { 
+        setRealtorCommission(value);
+    
+        const cleaned = value.replace(/[^0-9.]/g, ""); // remove non-numeric
+        const percent = Number(cleaned);
+        const decimal = isNaN(percent) ? 0.02 : percent / 100;
+    
+        setRealtorCommissionDecimal(decimal); // ✅ set the state with the new decimal
+    
+        console.info("realtorCommissionDecimal (calculated): " + decimal);
+        console.info("realtorCommissionDecimal (state): " + realtorCommissionDecimal);
+    };
+    
+    
+    const realtorTotal = (arvInput || houseSalePrice)
+    ? formatCurrency(Number(arvInput || houseSalePrice) * realtorCommissionDecimal)
+    : formatCurrency(0);
 
     const investment = formatCurrency(
         Number(rehab) +
         Number(purchasePriceInput) +
         Number(downPaymentInput) +
         Number(holdingCostInput) + // ✅ INCLUDE HOLDING COST
-        Number(total)
+        Number(total) +  Number(realtorTotal.replace(/[^0-9.-]+/g, ''))
     );
     const pocketInvestment = formatCurrency(
         Number(rehab) +
         Number(downPaymentInput) +
         Number(holdingCostInput) + // ✅ INCLUDE HOLDING COST
-        Number(total)
+        Number(total)+ + Number(realtorTotal.replace(/[^0-9.-]+/g, ''))
     );
 
     const saleInvestment = arvInput || houseSalePrice
-        ? formatCurrency(Number(arvInput || houseSalePrice) + Number(realtorTotal.replace(/[^0-9.-]+/g, '')))
+        ? formatCurrency(Number(arvInput || houseSalePrice) )
         : formatCurrency(0);
 
     const grandTotal = formatCurrency(
@@ -53,11 +76,12 @@ export default function SowRight({
 
     const convertDecimal = (value) => {
         setInputPercentage(value);
-        const percentageValue = value ? Number(value) / 100 : 0.7;
+        const percentageValue = value ? Number(value) / 100 : 0.02;
         const remainingPercentage = 1 - percentageValue;
         setPercentage(percentageValue);
         setRemainingDecimal(remainingPercentage);
     };
+
 
     const calculateMaxARV = (arv, inputPercentage) => {
         const percentageValue = inputPercentage ? Number(inputPercentage) / 100 : 0.7;
@@ -66,7 +90,7 @@ export default function SowRight({
     };
 
     const calculateRemainingPercentage = (inputPercentage) => {
-        const remaining = 100 - (inputPercentage || 70);
+        const remaining = 100 - (inputPercentage || 70); 
         return remaining;
     };
 
@@ -100,6 +124,10 @@ export default function SowRight({
         return number < 0 ? "text-red-500" : "text-green-600";
     };
     
+    // const grandTotalRaw = 
+    // Number(saleInvestment.replace(/[^0-9.-]+/g, '')) - 
+    // Number(investment.replace(/[^0-9.-]+/g, ''));
+
     return (
         <div className="Right calculations top-6">
             <div className="Right-calculations">
@@ -113,6 +141,8 @@ export default function SowRight({
                                     <label className="block mb-1 text-sm font-medium text-gray-700">Enter Purchase Price:</label>
                                     <input
                                         type="number"
+                                        inputMode="decimal"
+                                        pattern="[0-9]*[.,]?[0-9]*"
                                         className="w-full p-2 border rounded profitForm"
                                         value={purchasePriceInput}
                                         onChange={(e) => setPurchasePriceInput(e.target.value)}
@@ -127,6 +157,8 @@ export default function SowRight({
                                     <label className="block mb-1 text-sm font-medium text-gray-700">Enter Down Payment:</label>
                                     <input
                                         type="number"
+                                        inputMode="decimal"
+                                        pattern="[0-9]*[.,]?[0-9]*"
                                         className="w-full p-2 border rounded profitForm"
                                         value={downPaymentInput}
                                         onChange={handleDownPaymentChange}
@@ -141,10 +173,29 @@ export default function SowRight({
                                     <label className="block mb-1 text-sm font-medium text-gray-700">Rehab:</label>
                                     <input
                                         type="number"
+                                        inputMode="decimal"
+                                        pattern="[0-9]*[.,]?[0-9]*"
                                         className="w-full p-2 border rounded profitForm"
                                         value={rehab}
                                         onChange={(e) => setRehab(e.target.value)}
                                         placeholder="Rehab..."
+                                    />
+                                </div>
+                            </div>
+                            
+                            {/* ARV */}
+                            <div className="input-group-container">
+                                <div className="input-group">
+                                    <label htmlFor="arv">Realtor Commission:</label>
+                                    <input
+                                        type="number"
+                                        id="arv"
+                                        inputMode="decimal"
+                                        pattern="[0-9]*[.,]?[0-9]*"
+                                        className="w-full p-2 border rounded profitForm"
+                                        value={realtorCommissionInput}
+                                        onChange={(e) => convertRealtorCommisionDecimal(e.target.value)}
+                                        placeholder="%"
                                     />
                                 </div>
                             </div>
@@ -155,6 +206,8 @@ export default function SowRight({
                                     <label className="block mb-1 text-sm font-medium text-gray-700">Holding Cost:</label>
                                     <input
                                         type="number"
+                                        inputMode="decimal"
+                                        pattern="[0-9]*[.,]?[0-9]*"
                                         className="w-full p-2 border rounded profitForm"
                                         value={holdingCostInput}
                                         onChange={(e) => setHoldingCostInput(e.target.value)}
@@ -170,6 +223,8 @@ export default function SowRight({
                                     <input
                                         type="number"
                                         id="arv"
+                                        inputMode="decimal"
+                                        pattern="[0-9]*"
                                         className="w-full p-2 border rounded profitForm"
                                         value={arvInput}
                                         onChange={(e) => setArvInput(e.target.value)}
@@ -185,6 +240,7 @@ export default function SowRight({
                                     <input
                                         type="number"
                                         id="inputPercentage"
+                                        
                                         className="w-full p-2 border rounded profitForm"
                                         value={inputPercentage}
                                         onChange={(e) => convertDecimal(e.target.value)}
@@ -222,7 +278,7 @@ export default function SowRight({
                             </div>
 
                             <div className="tooltip-container">
-                                <div className="amount-title">Realtor Fees:</div>
+                                <div className="amount-title">Realtor Fees: {realtorCommissionInput || 2 }%</div>
                                 <div className="amount-container">{realtorTotal}</div>
                             </div>
 
@@ -230,11 +286,11 @@ export default function SowRight({
                                 <div className="amount-title">ARV:</div>
                                 <div className="amount-container">{formatCurrency(arvInput || houseSalePrice)}</div>
                             </div>
-
+{/* 
                             <div className="tooltip-container">
                                 <div className="amount-title">ARV + Realtor:</div>
                                 <div className="amount-container">{saleInvestment}</div>
-                            </div>
+                            </div> */}
 
                             <div className="tooltip-container">
                                 <div className="amount-title">Investment:</div>
@@ -252,7 +308,19 @@ export default function SowRight({
                                 <div className={`amount-container ${getAmountClass(grandTotal)}`}>{grandTotal}</div>
                             </div>
                         </div>
-
+                        <div className="calculation-card">
+                            <button
+                                onClick={() => setShowResale(!showResale)}
+                                className="w-full text-left font-medium text-blue-600 underline mb-2 button-reset "
+                            >
+                                
+                                <div className = "amount-title">
+                                {showResale ? <MdExpandMore /> : <MdExpandLess/>}
+                                ReSale additional
+                                </div>
+                            </button>
+                            {showResale && <Resale  grandTotal={grandTotal} />}
+                        </div>
                         <div className="calculation-card">
                             <div className="tooltip-container">
                                 <div className="amount-title">Calculated ARV:</div>

@@ -18,7 +18,9 @@
   box-sizing: border-box;
   border-radius: 0.5rem;
 }
-
+.category-name{
+  padding:10px;
+}
 .category-wrapper {
   display: flex;
   flex-wrap: wrap;

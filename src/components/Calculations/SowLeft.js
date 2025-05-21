@@ -12,28 +12,31 @@ export default function SowLeft({
     handleDeselectAll,
     handleCheckboxChange,
     handleInputChange,
+    handleSqurFtArv,
     handleRadioChange,
     handleBathroomCountChange,
     bathroomCount,
     setSelectedItems,
     selectedItems,
     setSqrFt,
-    sqrFt
+    sqrFt,
+    flooringTotal
 }) {
     return (
         <div className="Left">
             <div className="Left-Container">
                 <div className="Left-Wrapper" id="accordion">
                     <h2>Rehab Calculations</h2>
-                    <p>Total: {total}</p>
+                    <p>Total: {parseFloat(total)}</p>
 
                     <div className="extra-input mt-4 input-rehab-group">
                         <div className="input-group">
                             <label><span>Square Footage</span></label>
                             <input
                                 type="number"
-                                value={sqrFt || "0"}
+                                value={sqrFt || ""}
                                 placeholder="#"
+                                onChange={(e) => handleSqurFtArv(parseFloat(e.target.value))}
                                 className="w-full p-2 border rounded profitForm"
                             />
                         </div>
@@ -91,66 +94,78 @@ export default function SowLeft({
                                             .filter((item) =>
                                                 item.id.toLowerCase().startsWith(section.category.toLowerCase())
                                             )
-                                            .map((item) => (
-                                                <div key={item.id} className="category-breakdown">
-                                                    <div className="category-name">
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={item.checked}
-                                                            onChange={() => handleCheckboxChange(item.id)}
-                                                            className="border p-2 rounded-md rehab-input"
-                                                        />
-                                                        <span>{item.property}</span>
-                                                    </div>
+                                            .map((item) => {
+                                                let extraInfo;
 
-                                                    <div className="pricing">
-                                                        <div className="set-pricing">
-                                                            <label>
-                                                                <input
-                                                                    type="radio"
-                                                                    name={`useSetValue-${item.id}`}
-                                                                    checked={item.useSetValue}
-                                                                    onChange={() => handleRadioChange(item.id, true)}
-                                                                    className="border p-2 rounded-md rehab-input"
-                                                                />
-                                                                <span>{item.value}</span>
-                                                            </label>
-                                                        </div>
-                                                        <div className="custom-pricing">
-                                                            <label>
-                                                                <input
-                                                                    type="radio"
-                                                                    name={`useSetValue-${item.id}`}
-                                                                    checked={!item.useSetValue}
-                                                                    onChange={() => handleRadioChange(item.id, false)}
-                                                                    className="border p-2 rounded-md rehab-input"
-                                                                />
-                                                                <input
-                                                                    type="number"
-                                                                    value={item.useSetValue ? "" : item.inputValue || ""}
-                                                                    onFocus={() => handleRadioChange(item.id, false)}
-                                                                    onChange={(e) => handleInputChange(item.id, e.target.value)}
-                                                                    placeholder="Custom Value"
-                                                                    className="border p-2 rounded-md rehab-input"
-                                                                />
-                                                            </label>
-                                                        </div>
-                                                    </div>
+                                                if (item.property.toLowerCase() === "flooring") {
+                                                    extraInfo = (
+                                                            <label><span>{flooringTotal}</span></label>
+                                                    );
+                                                } else {
+                                                    extraInfo = <span>{parseFloat(item.value)}</span>;
+                                                }
 
-                                                    {item.property.toLowerCase() === "bathroom" && (
-                                                        <div className="extra-input mt-4 input-group">
-                                                            <label><span>Bathroom #</span></label>
+                                                return (
+                                                    <div key={item.id} className="category-breakdown">
+                                                        <div className="category-name">
                                                             <input
-                                                                type="number"
-                                                                value={bathroomCount || ""}
-                                                                onChange={(e) => handleBathroomCountChange(parseFloat(e.target.value))}
-                                                                placeholder="Enter number of bathrooms"
+                                                                type="checkbox"
+                                                                checked={item.checked}
+                                                                onChange={() => handleCheckboxChange(item.id)}
                                                                 className="border p-2 rounded-md rehab-input"
                                                             />
+                                                            <span>{item.property}</span>
                                                         </div>
-                                                    )}
-                                                </div>
-                                            ))}
+
+                                                        <div className="pricing">
+                                                            <div className="set-pricing">
+                                                                <label>
+                                                                    <input
+                                                                        type="radio"
+                                                                        name={`useSetValue-${item.id}`}
+                                                                        checked={item.useSetValue}
+                                                                        onChange={() => handleRadioChange(item.id, true)}
+                                                                        className="border p-2 rounded-md rehab-input"
+                                                                    />
+                                                                    {extraInfo}
+                                                                </label>
+                                                            </div>
+                                                            <div className="custom-pricing">
+                                                                <label>
+                                                                    <input
+                                                                        type="radio"
+                                                                        name={`useSetValue-${item.id}`}
+                                                                        checked={!item.useSetValue}
+                                                                        onChange={() => handleRadioChange(item.id, false)}
+                                                                        className="border p-2 rounded-md rehab-input"
+                                                                    />
+                                                                    <input
+                                                                        type="number"
+                                                                        value={item.useSetValue ? "" : item.inputValue || ""}
+                                                                        onFocus={() => handleRadioChange(item.id, false)}
+                                                                        onChange={(e) => handleInputChange(item.id, e.target.value)}
+                                                                        placeholder="Custom Value"
+                                                                        className="border p-2 rounded-md rehab-input"
+                                                                    />
+                                                                </label>
+                                                            </div>
+                                                        </div>
+
+                                                        {item.property.toLowerCase() === "bathroom" && (
+                                                            <div className="extra-input mt-4 input-group">
+                                                                <label><span>Bathroom #</span></label>
+                                                                <input
+                                                                    type="number"
+                                                                    value={bathroomCount || ""}
+                                                                    onChange={(e) => handleBathroomCountChange(parseFloat(e.target.value))}
+                                                                    placeholder="Enter number of bathrooms"
+                                                                    className="border p-2 rounded-md rehab-input"
+                                                                />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
                                     </div>
                                 )}
                             </div>
@@ -159,7 +174,6 @@ export default function SowLeft({
                         <div>No categories available.</div>
                     )}
 
-                    {/* ✅ Selected Items List Section */}
                     {selectedItems.length > 0 && (
                         <div className="selected-items mt-4 p-4 border-t">
                             <h4 className="font-bold mb-2">Selected Items:</h4>

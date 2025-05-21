@@ -5,7 +5,7 @@
     items: [
       { property: "Bathroom", value: 5000 },
       { property: "Kitchen", value: 10000 },
-      { property: "Flooring", value: 700 },
+      { property: "Flooring", value: 1.99 },
       { property: "Carpet", value: 700 },
       { property: "Interior Paint", value: 700 },
 
